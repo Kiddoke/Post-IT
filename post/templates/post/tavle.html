@@ -21,17 +21,61 @@
         </button>
     </form>
 
-    <div class ="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {% for f in forslag %}
-        <div class = "bg-yellow-200 p-4 rounded shadow">
-            <h2 class = "font-bold text-lg"> {{ f.tittel }} </h2>
-            <p class = "mt-2"> {{ f.innhold }} </p>
-            <p class = "text-sm text-gray-500 mt-4"> {{ f.opprettet|date:"d.m.Y H:i" }} </p>
+    <div class ="grid grid-cols-3 gap-4">
+        {% for kolonne, farge, label in kolonner %}
+        <div class = "bg-white rounded shadow p-4"> 
+            <h2 class = "font-bold text-lg mb-4"> {{label}} </h2>
+            <div class = "kolonne min-h-32 flex flex-col gap-3" data-status = "{{kolonne}}">
+                {% for f in forslag %}
+                {% if f.status == kolonne %}
+                <div class = "post-it p-4 rounded shadow cursor-grab {{farge}}" draggable = "true" data-id = "{{f.id}}"> 
+                    <h3 class = "font-bold"> {{f.tittel}} </h3>
+                    <p class = "text-sm mt-1"> {{f.innhold}} </p>
+                    <p class="text-xs text-gray-500 mt-2">{{f.opprettet|date:"d.m.Y H:i"}} </p>            
+                    <form method = "POST" action = "{% url 'slett' f.id %}" class = "mt-2"> 
+                        {% csrf_token %}
+                        <button type = "submit" class = "text-xs text-red-500 hover:underline">
+                            Slett
+                        </button>
+                    </form>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
         </div>
-        {% empty %}
-        <p class = "text-gray-500"> Tomt! </p>
         {% endfor %}
     </div>
+
+    <form method = "POST" id = "statusForm" action = "" class = "hidden">
+        {% csrf_token %}
+        <input type = "hidden" name = "status" id = "statusInput">
+    </form>
+
+    <script>
+        const postITs = document.querySelectorAll('.post-it');
+        const kolonner = document.querySelectorAll('.kolonne');
+        let dragged = null;
+
+        postITs.forEach(postIt => {
+            postIt.addEventListener('dragstart', () => dragged = postIt);
+        });
+
+        kolonner.forEach(kolonne => {
+            kolonne.addEventListener('dragover', event => event.preventDefault());
+            kolonne.addEventListener('drop', () => {
+                if (!dragged) return;
+                const nyStatus = kolonne.dataset.status;
+                const id = dragged.dataset.id;
+                const form = document.getElementById('statusForm');
+                form.action = `/oppdater/${id}/`;
+                document.getElementById('statusInput').value = nyStatus;
+                form.submit();
+            });
+        });
+    </script>
+
+
+
 
 </body>
 
