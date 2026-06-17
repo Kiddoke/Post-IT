@@ -8,7 +8,7 @@ En digital forslagstavle hvor man kan opprette, flytte og slette forslag på tve
 
 1. Klon repoet
 ```bash
-git clone https://github.uio.no/kevil/Post-IT.git
+git clone https://github.com/Kiddoke/Post-IT.git
 cd Post-IT
 ```
 
