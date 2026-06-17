@@ -23,7 +23,7 @@ source env/bin/activate
 
 3. Installer avhengigheter
 ```bash
-pip install django
+pip install -r requirements.txt
 ```
 
 4. Kjør migrasjoner
