@@ -1,7 +1,7 @@
 from django.db import models
 
 # Create your models here.
-class Post(models.Model):
+class PostIT(models.Model):
     tittel = models.CharField(max_length=20)
     innhold = models.TextField()
     status = models.CharField(max_length=10, default='ny')
