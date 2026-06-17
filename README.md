@@ -49,4 +49,3 @@ python manage.py runserver
 
 - Brukerautentisering så man kan se hvem som la inn et forslag
 - Mulighet for å kommentere på forslag
-- Bedre feilhåndtering (f.eks. hvis tittel eller innhold mangler)
